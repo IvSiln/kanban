@@ -1,21 +1,17 @@
 package model;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
     private final List<Integer> subtasksId = new ArrayList<>();
-    private Instant finishTime;
+    private LocalDateTime finishTime;
 
     public Epic(String epicName, String epicDetail, Status status) {
         super(epicName, epicDetail, status);
-    }
-
-    public Epic(String epicName, String epicDetail, Status status, Instant startTime, long duration) {
-        super(epicName, epicDetail, status, startTime, duration);
-        this.finishTime = super.getFinishTime();
     }
 
     public List<Integer> getSubtasksId() {
@@ -27,11 +23,11 @@ public class Epic extends Task {
     }
 
     @Override
-    public Instant getFinishTime() {
+    public LocalDateTime getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(Instant finishTime) {
+    public void setFinishTime(LocalDateTime finishTime) {
         this.finishTime = finishTime;
     }
 

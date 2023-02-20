@@ -1,6 +1,7 @@
 package model;
 
-import java.time.Instant;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -8,18 +9,16 @@ public class Task {
     protected String name;
     protected String detail;
     protected Status status;
-    protected Instant startTime;
-    protected long duration;
-    long SECOND_IN_MINUTE = 60;
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
     public Task(String name, String detail, Status status) {
         this.name = name;
         this.detail = detail;
         this.status = status;
-        this.startTime = Instant.now();
     }
 
-    public Task(String taskName, String detail, Status status, Instant startTime, long duration) {
+    public Task(String taskName, String detail, Status status, LocalDateTime startTime, Duration duration) {
         this.name = taskName;
         this.detail = detail;
         this.status = status;
@@ -35,24 +34,24 @@ public class Task {
         this.name = name;
     }
 
-    public Instant getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Instant startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public long getDuration() {
+    public Duration getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 
-    public Instant getFinishTime() {
-        return startTime.plusSeconds(SECOND_IN_MINUTE * duration);
+    public LocalDateTime getFinishTime() {
+        return startTime.plusSeconds(duration.toSeconds());
     }
 
     public int getId() {
@@ -97,8 +96,8 @@ public class Task {
                 ", name='" + getName() + '\'' +
                 ", detail='" + getDetail() + '\'' +
                 ", status=" + getStatus() +
-                ", startTime=" + getStartTime().toEpochMilli() +
-                ", finishTime=" + getFinishTime().toEpochMilli() +
+                ", startTime=" + getStartTime() +
+                ", finishTime=" + (getDuration() == Duration.ZERO ? "" : getDuration()) +
                 '}';
     }
 }

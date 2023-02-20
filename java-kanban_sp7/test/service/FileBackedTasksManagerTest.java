@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest {
     void shouldCorrectlySaveLoad() {
         Task task = new Task("name", "detail", Status.NEW);
         manager.addTask(task);
-        Epic epic = new Epic("name", "detail", Status.NEW, Instant.now(), 0);
+        Epic epic = new Epic("name", "detail", Status.NEW);
         manager.addEpic(epic);
         assertEquals(List.of(task), manager.getAllTasks());
         assertEquals(List.of(epic), manager.getAllEpics());

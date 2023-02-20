@@ -5,7 +5,8 @@ import model.Status;
 import model.Subtask;
 import model.Task;
 
-import java.time.Instant;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -74,6 +75,34 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    private void calculateEpicTime(Epic epic) {
+        List<Subtask> subtasks = new ArrayList<>();
+        if (!subtaskRepository.isEmpty()) {
+            for (int subtaskId : epic.getSubtasksId()
+            ) {
+                subtasks.add(getSubtask(subtaskId));
+            }
+        }
+        Duration sumDuration = null;
+        LocalDateTime minDate = null;
+        LocalDateTime maxDate = null;
+        for (Subtask subtask : subtasks) {
+            if (subtask.getDuration() != null && subtask.getStartTime() != null) {
+                if (minDate == null || minDate.isAfter(subtask.getStartTime()))
+                    minDate = subtask.getStartTime();
+                if (maxDate == null || maxDate.isBefore(subtask.getFinishTime()))
+                    maxDate = subtask.getFinishTime();
+                if (sumDuration == null)
+                    sumDuration = subtask.getDuration();
+                else
+                    sumDuration = sumDuration.plus(subtask.getDuration());
+            }
+        }
+        epic.setStartTime(minDate);
+        epic.setDuration(sumDuration);
+        epic.setFinishTime(maxDate);
+    }
+
     @Override
     public Task addTask(Task task) {
         if (task == null) return null;
@@ -103,7 +132,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Map<Integer, Task> getTaskRepository() {
         if (taskRepository.size() == 0) {
             System.out.println("Список задач пуст");
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         return taskRepository;
     }
@@ -128,6 +157,7 @@ public class InMemoryTaskManager implements TaskManager {
             int newId = generateId();
             epic.setId(newId);
             epic.setStatus(Status.NEW);
+            calculateEpicTime(epic);
             epicRepository.put(epic.getId(), epic);
             return epic;
         }
@@ -241,8 +271,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     public void updateTimeEpic(Epic epic) {
         List<Subtask> subtasks = getAllSubtasksByEpicId(epic.getId());
-        Instant startTime = subtasks.get(0).getStartTime();
-        Instant endTime = subtasks.get(0).getFinishTime();
+        LocalDateTime startTime = subtasks.get(0).getStartTime();
+        LocalDateTime endTime = subtasks.get(0).getFinishTime();
 
         for (Subtask subtask : subtasks) {
             if (subtask.getStartTime().isBefore(startTime)) startTime = subtask.getStartTime();
@@ -251,8 +281,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         epic.setStartTime(startTime);
         epic.setFinishTime(endTime);
-        long duration = (endTime.toEpochMilli() - startTime.toEpochMilli());
-        epic.setDuration(duration);
+        epic.setDuration(Duration.between(startTime, endTime));
     }
 
     public List<Subtask> getAllSubtasksByEpicId(int id) {
@@ -338,7 +367,7 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Subtask> getListSubtask(Epic epic) {
         if (getSubtaskRepository().size() == 0) {
             System.out.println("Список сабтасков пуст");
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         return new ArrayList<>(getSubtaskRepository().values());
     }

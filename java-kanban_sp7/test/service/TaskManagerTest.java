@@ -6,7 +6,10 @@ import model.Subtask;
 import model.Task;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -17,15 +20,15 @@ abstract class TaskManagerTest<T extends TaskManager> {
     protected T manager;
 
     protected Task creatTask() {
-        return new Task("name", "detail", Status.NEW, Instant.now(), 0);
+        return new Task("name", "detail", Status.NEW, LocalDateTime.now(), Duration.between(LocalTime.MIN,LocalTime.of(00,30,00)));
     }
 
     protected Epic creatEpic() {
-        return new Epic("name", "detail", Status.NEW, Instant.now(), 0);
+        return new Epic("name", "detail", Status.NEW);
     }
 
     protected Subtask creatSubtask(Epic epic) {
-        return new Subtask("name", "Title", Status.NEW, epic.getId(), Instant.now(), 0);
+        return new Subtask("name", "Title", Status.NEW, epic.getId(), LocalDateTime.now(), Duration.between(LocalTime.MIN,LocalTime.of(01,30,00)));
     }
 
     @Test

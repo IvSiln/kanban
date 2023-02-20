@@ -6,7 +6,9 @@ import model.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -211,11 +213,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         Status status = Status.valueOf(recovery[3]);
         String detail = recovery[4];
         Integer epicId = type.equals("SUBTASK") ? Integer.parseInt(recovery[5]) : null;
-        Instant startTime = Instant.parse(recovery[6]);
-        long duration = Long.parseLong(recovery[7]);
+        LocalDateTime startTime = LocalDateTime.parse(recovery[6]);
+        Duration duration = Duration.parse(recovery[7]);
 
         if (type.equals("EPIC")) {
-            var epic = new Epic(name, detail, status, startTime, duration);
+            var epic = new Epic(name, detail, status);
             epic.setId(id);
             epic.setStatus(status);
             return epic;
