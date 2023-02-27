@@ -7,7 +7,6 @@ import model.Task;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
@@ -20,7 +19,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     protected T manager;
 
     protected Task creatTask() {
-        return new Task("name", "detail", Status.NEW, LocalDateTime.now(), Duration.between(LocalTime.MIN,LocalTime.of(00,30,00)));
+        return new Task("name", "detail", Status.NEW, LocalDateTime.now(), Duration.between(LocalTime.MIN, LocalTime.of(00, 30, 00)));
     }
 
     protected Epic creatEpic() {
@@ -28,7 +27,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     protected Subtask creatSubtask(Epic epic) {
-        return new Subtask("name", "Title", Status.NEW, epic.getId(), LocalDateTime.now(), Duration.between(LocalTime.MIN,LocalTime.of(01,30,00)));
+        return new Subtask("name", "Title", Status.NEW, epic.getId(), LocalDateTime.now(), Duration.between(LocalTime.MIN, LocalTime.of(01, 30, 00)));
     }
 
     @Test
@@ -43,7 +42,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldUpdateTaskStatusInProgress() {
-        Task task = new Task("nameTask", "detailTask", Status.NEW);
+        Task task = creatTask();
         manager.addTask(task);
         task.setStatus(Status.IN_PROGRESS);
         manager.updateTask(task);
@@ -207,7 +206,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(epic.getId(), subtask.getEpicId());
         assertEquals(Status.NEW, subtask.getStatus());
         assertEquals(subtask, subtasksMap.get(subtask.getId()));
-        assertEquals(epic.getSubtasksId(), List.of(subtask.getId()));
+        assertEquals(epic.getSubtasksList(), List.of(subtask));
     }
 
     @Test
@@ -257,7 +256,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Subtask subtask = creatSubtask(epic);
         manager.addSubtask(subtask);
         manager.clearAllSubtask();
-        assertTrue(epic.getSubtasksId().isEmpty());
+        assertTrue(epic.getSubtasksList().isEmpty());
         assertTrue(manager.getSubtaskRepository().isEmpty());
     }
 

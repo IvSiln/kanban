@@ -13,11 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,7 +41,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest {
 
     @Test
     void shouldCorrectlySaveLoad() {
-        Task task = new Task("name", "detail", Status.NEW);
+        Task task = new Task("name", "detail", Status.NEW, LocalDateTime.now(), Duration.between(LocalTime.MIN, LocalTime.of(0, 30, 0)));
         manager.addTask(task);
         Epic epic = new Epic("name", "detail", Status.NEW);
         manager.addEpic(epic);

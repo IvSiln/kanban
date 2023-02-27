@@ -36,10 +36,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         final Node<Task> newNode = new Node<>(oldTail, element, null);
         tail = newNode;
         historyRepository.put(element.getId(), newNode);
-        if (oldTail == null)
-            head = newNode;
-        else
-            oldTail.next = newNode;
+        if (oldTail == null) head = newNode;
+        else oldTail.next = newNode;
     }
 
     private List<Task> getTasks() {

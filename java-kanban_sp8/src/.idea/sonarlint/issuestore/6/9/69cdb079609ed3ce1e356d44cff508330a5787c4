@@ -1,0 +1,13 @@
+
+0
+java:S1220""Move this file to a named package.
+V
+java:S1854";Remove this useless assignment to local variable "manager".(¦ßòëùÿÿÿÿ
+G
+java:S1481",Remove this unused "manager" local variable.(¦ßòëùÿÿÿÿ
+Q	java:S125"<This block of commented-out lines of code should be removed.(¨Ï†ñ
+P	java:S125"<This block of commented-out lines of code should be removed.(µŸÂn
+N	java:S106$"9Replace this use of System.out or System.err by a logger.(ÄƒÄî
+7
+java:S1116%"Remove this empty statement.(Åñ­õşÿÿÿÿ
+V	java:S125'"<This block of commented-out lines of code should be removed.(­õ¹›ıÿÿÿÿ

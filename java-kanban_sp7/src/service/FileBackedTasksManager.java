@@ -7,7 +7,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -170,13 +169,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     private String toString(Task task) {
+        Duration duration = (task.getDuration() == null ? Duration.ZERO : task.getDuration());
+        String localDateTime = (task.getStartTime() == null ? "null" : task.getStartTime().toString());
         String[] generatingArray = {Integer.toString(task.getId()), getType(task).toString(), task.getName(),
-                task.getStatus().toString(), task.getDetail(), getEpicId(task), task.getStartTime().toString(),
-                String.valueOf(task.getDuration())};
-        int EPICID_INDEX = 5;
-        if (generatingArray[EPICID_INDEX].isBlank()) {
-            generatingArray[EPICID_INDEX] = null;
-        }
+                task.getStatus().toString(), task.getDetail(), getEpicId(task), localDateTime,
+                String.valueOf(duration)};
+        
         return String.join(",", generatingArray);
     }
 
