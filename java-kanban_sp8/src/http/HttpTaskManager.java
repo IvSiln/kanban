@@ -1,27 +1,28 @@
-package service;
+package http;
 
 import com.google.gson.*;
-import http.KVClient;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-import util.LocalDateTimeTypeAdapter;
+import service.FileBackedTasksManager;
+import service.HistoryManager;
+import util.DurationTypeAdapter;
 
-import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Duration;
 import java.util.stream.Collectors;
 
-public class HttpTasksManager extends FileBackedTasksManager {
-    static final String KEY_TASKS = "tasks";
-    static final String KEY_SUBTASKS = "subtasks";
-    static final String KEY_EPICS = "epics";
-    static final String KEY_HISTORY = "history";
+public class HttpTaskManager extends FileBackedTasksManager {
+
+    final static String KEY_TASKS = "tasks";
+    final static String KEY_SUBTASKS = "subtasks";
+    final static String KEY_EPICS = "epics";
+    final static String KEY_HISTORY = "history";
     private static final Gson gson =
-            new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create();
+            new GsonBuilder().registerTypeAdapter(Duration.class, new DurationTypeAdapter()).create();
     final KVClient client;
 
-    public HttpTasksManager(HistoryManager historyManager, String path) throws IOException, InterruptedException {
+    public HttpTaskManager(HistoryManager historyManager, String path) throws IOException, InterruptedException {
         super(historyManager);
         client = new KVClient(path);
 
@@ -68,11 +69,6 @@ public class HttpTasksManager extends FileBackedTasksManager {
         }
     }
 
-    public HttpTasksManager(HistoryManager historyManager, File file, KVClient client) {
-        super(historyManager, file);
-        this.client = client;
-    }
-
     @Override
     public void save() {
         client.put(KEY_TASKS, gson.toJson(getTaskRepository().values()));
@@ -83,4 +79,5 @@ public class HttpTasksManager extends FileBackedTasksManager {
                 .map(Task::getId)
                 .collect(Collectors.toList())));
     }
+
 }

@@ -47,7 +47,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else return true;
     }
 
-    private List<Task> getPrioritizedTasks() {
+    public List<Task> getPrioritizedTasks() {
         return prioritizedTasks.stream().toList();
     }
 
@@ -58,45 +58,6 @@ public class InMemoryTaskManager implements TaskManager {
     public boolean isLater(Task first, Task second) {
         return (first.getStartTime().isAfter(second.getStartTime()) && first.getFinishTime().isAfter(second.getFinishTime()));
     }
-
-    //    public void getActualStatus(Epic epic) {
-//        if (getEpicRepository().containsKey(epic.getId())) {
-//            if (epic.getSubtasksList().isEmpty()) {
-//                epic.setStatus(Status.NEW);
-//            } else {
-//                List<Subtask> subtasksNew = new ArrayList<>();
-//                int countNew = 0;
-//                int countDone = 0;
-//
-//                for (int i = 0; i < epic.getSubtasksList().size(); i++) {
-//                    subtasksNew.add(getSubtaskRepository().get(epic.getSubtasksList().get(i)));
-//                }
-//
-//                for (Subtask subtask : subtasksNew) {
-//                    if (subtask.getStatus() == Status.DONE) {
-//                        countDone++;
-//                    }
-//                    if (subtask.getStatus() == Status.NEW) {
-//                        countNew++;
-//                    }
-//                    if (subtask.getStatus() == Status.IN_PROGRESS) {
-//                        epic.setStatus(Status.IN_PROGRESS);
-//                        return;
-//                    }
-//                }
-//
-//                if (countDone == epic.getSubtasksList().size()) {
-//                    epic.setStatus(Status.DONE);
-//                } else if (countNew == epic.getSubtasksList().size()) {
-//                    epic.setStatus(Status.NEW);
-//                } else {
-//                    epic.setStatus(Status.IN_PROGRESS);
-//                }
-//            }
-//        } else {
-//            System.out.println("Эпик на найден");
-//        }
-//    }
     private void validatePriority() {
         List<Task> tasks = getPrioritizedTasks();
 

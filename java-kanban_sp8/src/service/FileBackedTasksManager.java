@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    private final File file;
+    private  File file = null;
     private static final String TITLE = "id,type,name,status,detail,epicId,startTime, duration\n";
 
 
@@ -112,7 +112,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
-    public void loadFromFile(File file) {
+    public void loadFromFile() {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             var line = bufferedReader.readLine();
             while (bufferedReader.ready()) {
